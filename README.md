@@ -159,40 +159,45 @@ You can use the Docker container to avoid building all the dependencies yourself
 3. Navigate to the repository.
 4. Get the docker container with either of the following options.
    - Option 1: pull from the cloud [limbo018/dreamplace](https://hub.docker.com/r/limbo018/dreamplace).
-   ```
+
+   ```bash
    docker pull limbo018/dreamplace:cuda
    ```
+
    - Option 2: build the container.
-   ```
+
+   ```bash
    docker build . --file Dockerfile --tag your_name/dreamplace:cuda
    ```
+
 5. Enter bash environment of the container. Replace `limbo018` with your name if option 2 is chosen in the previous step.
 
-Run with GPU on Linux.
+   Run with GPU on Linux.
 
-```
-docker run --gpus 1 -it -v $(pwd):/DREAMPlace limbo018/dreamplace:cuda bash
-```
+   ```bash
+   docker run --gpus 1 -it -v $(pwd):/DREAMPlace limbo018/dreamplace:cuda bash
+   ```
 
-Run with GPU on Windows.
+   Run with GPU on Windows.
 
-```
-docker run --gpus 1 -it -v /dreamplace limbo018/dreamplace:cuda bash
-```
+   ```bash
+   docker run --gpus 1 -it -v /dreamplace limbo018/dreamplace:cuda bash
+   ```
 
-Run without GPU on Linux.
+   Run without GPU on Linux.
 
-```
-docker run -it -v $(pwd):/DREAMPlace limbo018/dreamplace:cuda bash
-```
+   ```bash
+   docker run -it -v $(pwd):/DREAMPlace limbo018/dreamplace:cuda bash
+   ```
 
-Run without GPU on Windows.
+   Run without GPU on Windows.
 
-```
-docker run -it -v /dreamplace limbo018/dreamplace:cuda bash
-```
+   ```bash
+   docker run -it -v /dreamplace limbo018/dreamplace:cuda bash
+   ```
 
 6. `cd /DREAMPlace`.
+
 7. Go to [next section](#build-without-docker) to complete building within the container.
 
 ## Build without Docker
@@ -200,7 +205,7 @@ docker run -it -v /dreamplace limbo018/dreamplace:cuda bash
 [CMake](https://cmake.org) is adopted as the makefile system.
 To build, go to the root directory.
 
-```
+```bash
 mkdir build
 cd build # we call this <build directory>
 cmake .. -DCMAKE_INSTALL_PREFIX=<installation directory> -DPython_EXECUTABLE=$(which python)
@@ -212,7 +217,7 @@ Third party submodules are automatically built except for [Boost](https://www.bo
 
 To clean, go to the root directory.
 
-```
+```bash
 rm -r build
 ```
 `<build directory>` can be removed after installation if you do not need incremental compilation later. 
@@ -228,36 +233,36 @@ Here are the available options for CMake.
   - It must be consistent with the \_GLIBCXX_USE_CXX11_ABI for compling all the C++ dependencies, such as Boost and PyTorch.
   - PyTorch in default is compiled with \_GLIBCXX_USE_CXX11_ABI=0, but in a customized PyTorch environment, it might be compiled with \_GLIBCXX_USE_CXX11_ABI=1.
 
-# How to Get Benchmarks
+## How to Get Benchmarks
 
 To get ISPD 2005 and 2015 benchmarks, run the following script from the directory.
 
-```
+```bash
 python benchmarks/ispd2005_2015.py
 ```
 
-# How to Run
+## How to Run
 
 Before running, make sure the benchmarks have been downloaded and the python dependency packages have been installed.
 Go to the **install directory** and run with JSON configuration file for full placement.
 
-```
+```bash
 cd <installation directory>
 python dreamplace/Placer.py test/ispd2005/adaptec1.json
 ```
 
 Test individual `pytorch` op with the unit tests in the root directory.
 
-```
+```bash
 cd <installation directory>
 python unittest/ops/hpwl_unittest.py
 ```
 
-# Configurations
+## Configurations
 
 Descriptions of options in JSON configuration file can be found by running the following command.
 
-```
+```bash
 cd <installation directory>
 python dreamplace/Placer.py --help
 ```
@@ -272,9 +277,7 @@ The list of options as follows will be shown.
 | verilog_input  | optional for LEF/DEF   | input VERILOG file, provide circuit netlist information if it is not included in DEF file |
 | gpu            | 1                      | enable gpu or not                                                                         |
 
-...
-
-# Authors
+## Authors
 
 - [Yibo Lin](http://yibolin.com), supervised by [David Z. Pan](http://users.ece.utexas.edu/~dpan), composed the initial release.
 - [Zixuan Jiang](https://github.com/ZixuanJiang) and [Jiaqi Gu](https://github.com/JeremieMelo) improved the efficiency of the wirelength and density operators on GPU.
@@ -282,7 +285,8 @@ The list of options as follows will be shown.
 - [Peiyu Liao](https://enzoleo.github.io) and [Siting Liu](https://lusica1031.github.io) developed and integrated timing optimization in global placement for DREAMPlace 4.0.
 - Yifan Chen developed the 2-stage flow and improved the optimizer for macro placement in DREAMPlace 4.1. Set ```use_bb``` to 1 to turn on BB-step and ```macro_place_flag``` to 1 to enable 2-stage flow for macro placement. 
 - Yiting Liu contributed the GiFt operator for placement initialization, published at ICCAD 2024. Set ```gift_init_flag``` to 1 to turn on this feature, and use ```gift_init_scale``` to control the scale parameter of this operator. 
-```
+
+```text
 Yiting Liu, Hai Zhou, Jia Wang, Fan Yang, Xuan Zeng, Li Shang, 
 "The Power of Graph Signal Processing for Chip Placement Acceleration", 
   IEEE/ACM International Conference on Computer-Aided Design (ICCAD), New Jersey, USA, Oct, 2024
@@ -291,7 +295,7 @@ Yiting Liu, Hai Zhou, Jia Wang, Fan Yang, Xuan Zeng, Li Shang,
 
 - **Pull requests to improve the tool are more than welcome.** We appreciate all kinds of contributions from the community.
 
-# Features
+## Features
 
 - [0.0.2](https://github.com/limbo018/DREAMPlace/releases/tag/0.0.2)
 
@@ -345,11 +349,11 @@ Yiting Liu, Hai Zhou, Jia Wang, Fan Yang, Xuan Zeng, Li Shang,
 - [4.1.0](https://github.com/limbo018/DREAMPlace/releases/tag/4.1.0)
   - Support BB step and 2-stage macro placement flow as published at ICCAD 2023
   - Tested under ISPD 2005 with all fixed macros and IO pads regarded as movable macros (see test/ispd2005free) and MMS benchmarks (see test/mms)
- 
+
 - [4.2.0](https://github.com/limbo018/DREAMPlace/releases/tag/4.2.0)
   - Support GiFt initialization as published at ICCAD 2024
- 
-# Reference Results for Macro Placement
+
+## Reference Results for Macro Placement
 
 Recently, many studies chose DREAMPLace for macro placement, e.g., [[Cheng+, NeurIPS2021](https://arxiv.org/abs/2111.00234)], [[Lai+, NeurIPS2023](https://arxiv.org/pdf/2211.13382)], etc. However, the results reported on the same benchmarks vary significantly from one work to another. For better comparison, we provide the results collected from our GPU machine for reference. If your results deviate significantly (i.e., >5% longer HPWL) from the following numbers, something may be wrong. We recommend you to contact us with logs for validation.
 
@@ -637,4 +641,3 @@ Our modified version can be downloaded from [here](https://www.dropbox.com/scl/f
 </table>
 `*` denotes divergence or legalization failure. 
 Note that if you observe divergence or legalization errors in the log, then the results may not be representative. 
-
